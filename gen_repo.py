@@ -27,15 +27,14 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
                 if hash_type == "" and hash_value == "":
                     hash_type = "sha256"
                     hash_value = hash_sum
-                sql = f'INSERT INTO {bucket_name} VALUES ("{package}","{version}","{str(url)}","{hash_type}","{hash_value}")'
+                sql = f'INSERT INTO REPO VALUES ("{package}","{version}","{bucket_name}","{str(url)}","{hash_type}","{hash_value}")'
                 cursor.execute(sql)
     cursor.close()
     db.commit()
 
 db = sqlite3.connect('repo.db')
 
-db.execute('''CREATE TABLE Main (PACKAGE TEXT,VERSION TEXT,URL TEXT,HASH_TYPE TEXT,HASH_VALUE TEXT)''')
-db.execute('''CREATE TABLE Extras (PACKAGE TEXT,VERSION TEXT,URL TEXT,HASH_TYPE TEXT,HASH_VALUE TEXT)''')
+db.execute('''CREATE TABLE REPO (PACKAGE TEXT,VERSION TEXT,BUCKET TEXT,URL TEXT,HASH_TYPE TEXT,HASH_VALUE TEXT)''')
 
 current_dir = Path(__file__).absolute().parent
 gen_repo(db,"Main",current_dir.joinpath("Main").joinpath("bucket"))
