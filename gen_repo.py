@@ -34,7 +34,7 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
 
 db = sqlite3.connect('repo.db')
 
-db.execute('''CREATE TABLE REPO (PACKAGE TEXT,VERSION TEXT,BUCKET TEXT,URL TEXT,HASH_TYPE TEXT,HASH_VALUE TEXT)''')
+db.execute('''CREATE TABLE Repo (PACKAGE TEXT,VERSION TEXT,BUCKET TEXT,URL TEXT,HASH_TYPE TEXT,HASH_VALUE TEXT)''')
 
 current_dir = Path(__file__).absolute().parent
 gen_repo(db,"Main",current_dir.joinpath("Main").joinpath("bucket"))
