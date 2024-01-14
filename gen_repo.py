@@ -19,14 +19,16 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
             if isinstance(url,str):
                 hash_type = ""
                 hash_value = ""
-                for i in hash_sum:
-                    if i == ":":
-                        hash_type = hash_sum.split(":")[0]
-                        hash_value = hash_sum.split(":")[1]
-                        break
-                if hash_type == "" and hash_value == "":
-                    hash_type = "sha256"
-                    hash_value = hash_sum
+                if hash_sum:
+                    for i in hash_sum:
+                        if i == ":":
+                            hash_type = hash_sum.split(":")[0]
+                            hash_value = hash_sum.split(":")[1]
+                            break
+                    if hash_type == "" and hash_value == "":
+                        hash_type = "sha256"
+                        hash_value = hash_sum
+                    
                 sql = f'INSERT INTO REPO VALUES ("{package}","{version}","{bucket_name}","{str(url)}","{hash_type}","{hash_value}")'
                 cursor.execute(sql)
     cursor.close()
