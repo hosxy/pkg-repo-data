@@ -10,7 +10,7 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
             manifest = json.load(f)
             package = file.stem
             version = manifest.get("version")
-            if manifest.get("url") != None:
+            if manifest.get("url") is not None:
                 url = manifest.get("url")
                 hash_sum = manifest.get("hash")
             else:
