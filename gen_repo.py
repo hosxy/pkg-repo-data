@@ -14,7 +14,7 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
                 if manifest.get("url") is not None:
                     url = manifest.get("url")
                     hash_sum = manifest.get("hash")
-                elif manifest.get("architecture").get("64bit").get("url") is not None:
+                elif manifest.get("architecture").get("64bit") is not None:
                     url = manifest.get("architecture").get("64bit").get("url")
                     hash_sum = manifest.get("architecture").get("64bit").get("hash")
                 else:
