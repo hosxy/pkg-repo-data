@@ -10,27 +10,31 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
             manifest = json.load(f)
             package = file.stem
             version = manifest.get("version")
-            if manifest.get("url") is not None:
-                url = manifest.get("url")
-                hash_sum = manifest.get("hash")
+            try:
+                if manifest.get("url") is not None:
+                    url = manifest.get("url")
+                    hash_sum = manifest.get("hash")
+                else:
+                    url = manifest.get("architecture").get("64bit").get("url")
+                    hash_sum = manifest.get("architecture").get("64bit").get("hash")
+            except AttributeError:
+                print(f"decode json file {file} failed.")
             else:
-                url = manifest.get("architecture").get("64bit").get("url")
-                hash_sum = manifest.get("architecture").get("64bit").get("hash")
-            if isinstance(url,str):
-                hash_type = ""
-                hash_value = ""
-                if hash_sum:
-                    for i in hash_sum:
-                        if i == ":":
-                            hash_type = hash_sum.split(":")[0]
-                            hash_value = hash_sum.split(":")[1]
-                            break
-                    if hash_type == "" and hash_value == "":
-                        hash_type = "sha256"
-                        hash_value = hash_sum
-                    
-                sql = f'INSERT INTO REPO VALUES ("{package}","{version}","{bucket_name}","{str(url)}","{hash_type}","{hash_value}")'
-                cursor.execute(sql)
+                if isinstance(url,str):
+                    hash_type = ""
+                    hash_value = ""
+                    if hash_sum:
+                        for i in hash_sum:
+                            if i == ":":
+                                hash_type = hash_sum.split(":")[0]
+                                hash_value = hash_sum.split(":")[1]
+                                break
+                        if hash_type == "" and hash_value == "":
+                            hash_type = "sha256"
+                            hash_value = hash_sum
+                        
+                    sql = f'INSERT INTO REPO VALUES ("{package}","{version}","{bucket_name}","{str(url)}","{hash_type}","{hash_value}")'
+                    cursor.execute(sql)
     cursor.close()
     db.commit()
 
