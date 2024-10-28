@@ -14,9 +14,11 @@ def gen_repo(db:sqlite3.Connection,bucket_name:str,bucket_path:Path):
                 if manifest.get("url") is not None:
                     url = manifest.get("url")
                     hash_sum = manifest.get("hash")
-                else:
+                elif manifest.get("architecture").get("64bit").get("url") is not None:
                     url = manifest.get("architecture").get("64bit").get("url")
                     hash_sum = manifest.get("architecture").get("64bit").get("hash")
+                else:
+                    continue
             except AttributeError:
                 print(f"decode json file {file} failed.")
             else:
